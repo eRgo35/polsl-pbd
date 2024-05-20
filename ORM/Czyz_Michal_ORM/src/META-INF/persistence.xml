@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="laborm-persistance-unit" transaction-type="RESOURCE_LOCAL">
+    <!--<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>-->
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>pl.polsl.zti.db1.domain.Client</class>
+    <class>pl.polsl.zti.db1.domain.Order</class>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:6033/laborm"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <!--<property name="eclipselink.logging.level" value="FINE"/>-->
+      <property name = "hibernate.show_sql" value = "true" />
+    </properties>
+  </persistence-unit>
+</persistence>
