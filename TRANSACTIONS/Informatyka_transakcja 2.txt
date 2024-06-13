@@ -1,0 +1,39 @@
+--Transakcja 2
+
+SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITED;
+SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+--2
+begin;
+
+update students set student_name=’XX’ where student_id=1;
+
+--4
+rollback;
+-----------------------------------------------
+--2
+begin; 
+
+--4
+update students set student_name=’XX2’ where student_id=1; 
+--(B)
+
+--6
+commit; 
+
+-----------------------------------------------
+--2
+begin; 
+
+--4
+select * from students; 
+(E)
+
+--6
+update students set  student_name=’ZZ2’ where student_id=1;
+(G)
+
+--8
+rollback; 
