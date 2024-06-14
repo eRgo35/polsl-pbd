@@ -1,7 +1,7 @@
 # Laboratorium z Podstaw Baz Danych
 ## Temat: Tranzakcje
 
-### Data wykonania ćwiczenia: 23.05.2024
+### Data wykonania ćwiczenia: 13.06.2024
 ### Przygotowali: Michał Czyż, Dawid Głąb
 ### Grupa 6, Sekcja 13
 
