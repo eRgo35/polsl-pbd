@@ -218,18 +218,20 @@ return {
 ## 9. Podać z ilu różnych przedmiotów prowadzi zajęcia pracownik SKRZYPEK (1/1)
 
 ```aql
-for p in przedmioty
-for r in rozklady
 let skrzypek = (
-    for pr in pracownicy
+  for pr in pracownicy
     filter pr.NAZWISKO == "SKRZYPEK"
     return pr._key
 )
-filter r.NR_PRAC == skrzypek[0]
-filter p._key == r.NR_PRZEDM
-collect nazwa = p.NAZWA_PRZEDM
-collect with count into amount
-return amount
+
+for p in przedmioty
+  for r in rozklady
+    filter r.NR_PRAC == skrzypek[0]
+    filter p._key == r.NR_PRZEDM
+    
+    collect aggregate amount = COUNT_DISTINCT(r.NR_PRZEDM)
+
+    return amount
 ```
 
 1 element
@@ -341,10 +343,17 @@ for p in przedmioty
         filter pr._key == p.NR_ODP_PRAC
         for r in rozklady
             filter r.NR_PRAC == pr._key
-            collect nazwiska = pr.NAZWISKO with count into total
+            collect nazwisko = pr.NAZWISKO, nrp = pr._key INTO pracownicy
+
+            let amount = COUNT_DISTINCT(
+              for prac in pracownicy
+                return prac.r._key
+            )
+
             return {
-                nazwisko: nazwiska,
-                liczbaZajec: total
+              "nrp": nrp,
+              "nazwisko": nazwisko,
+              "ilość": amount
             }
 ```
 
@@ -352,8 +361,9 @@ for p in przedmioty
 
 ```json
   {
+    "nrp": "22",
     "nazwisko": "BIERNAT",
-    "liczbaZajec": 2
+    "ilość": 2
   },
 ```
 
@@ -393,13 +403,15 @@ Ilość wyników się nie zgadza. Ale skoro należy podać nazwy przedmiotów i 
 ```aql
 for p in pracownicy
   for r in rozklady
-  filter r.NR_PRAC == p._key and r.DZIEN == "PON"
-  collect prac = p.NAZWISKO into pracG
-  let n = count(
-    for g in pracG
-    return g.r._key
-  )
-  return {"pracownik": prac, "liczba zajęć": n}
+    filter r.NR_PRAC == p._key and r.DZIEN == "PON"
+    collect prac = p.NAZWISKO into pracG
+    let n = count(
+      for pr in pracG
+        return pr.r._key
+    )
+    filter n > 1
+  
+    return {"pracownik": prac, "liczba zajęć": n}
 ```
 
 6 elements
@@ -409,7 +421,7 @@ for p in pracownicy
   {
     "pracownik": "GRZYBEK",
     "liczba zajęć": 2
-  },
+  }
 ]
 ```
 
